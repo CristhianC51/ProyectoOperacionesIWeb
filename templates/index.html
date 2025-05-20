@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Set Cover Optimization</title>
+</head>
+<body>
+    <h1>🛰️ Optimización de Antenas</h1>
+    <form method="post" action="/run">
+        <button type="submit">Ejecutar Algoritmo</button>
+    </form>
+
+    {% if show_results %}
+        <h2>📊 Resultados</h2>
+        <p><strong>Antenas seleccionadas:</strong> {{ selected|length }}</p>
+        <p><strong>Costo total:</strong> ${{ cost }}</p>
+        <p><strong>Clientes cubiertos:</strong> {{ covered }} de {{ total }}</p>
+        <p><strong>Índices seleccionados:</strong> {{ selected }}</p>
+    {% endif %}
+</body>
+</html>
