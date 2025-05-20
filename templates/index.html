@@ -2,20 +2,29 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Set Cover Optimization</title>
+    <title>🛰️ Optimizador de Antenas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>🛰️ Optimización de Antenas</h1>
-    <form method="post" action="/run">
-        <button type="submit">Ejecutar Algoritmo</button>
-    </form>
+    <div class="container">
+        <h1>🛰️ Optimización de Cobertura</h1>
+        <p>Haz clic para ejecutar el algoritmo genético que selecciona las mejores antenas para cubrir a todos los clientes con el menor costo.</p>
 
-    {% if show_results %}
-        <h2>📊 Resultados</h2>
-        <p><strong>Antenas seleccionadas:</strong> {{ selected|length }}</p>
-        <p><strong>Costo total:</strong> ${{ cost }}</p>
-        <p><strong>Clientes cubiertos:</strong> {{ covered }} de {{ total }}</p>
-        <p><strong>Índices seleccionados:</strong> {{ selected }}</p>
-    {% endif %}
+        <form method="post" action="/run">
+            <button type="submit" class="btn-run">🚀 Ejecutar Algoritmo</button>
+        </form>
+
+        {% if show_results %}
+        <div class="results">
+            <h2>📊 Resultados</h2>
+            <p><strong>✅ Antenas seleccionadas:</strong> {{ selected|length }}</p>
+            <p><strong>💰 Costo total:</strong> ${{ cost }}</p>
+            <p><strong>👥 Clientes cubiertos:</strong> {{ covered }} de {{ total }}</p>
+            <p><strong>📍 Índices seleccionados:</strong></p>
+            <div class="scroll-box">{{ selected }}</div>
+        </div>
+        {% endif %}
+    </div>
 </body>
 </html>

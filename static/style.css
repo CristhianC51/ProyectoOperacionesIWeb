@@ -1,0 +1,65 @@
+body {
+    background-color: #f4f6f8;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #222;
+    font-size: 32px;
+}
+
+p {
+    color: #444;
+    font-size: 16px;
+}
+
+form {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.btn-run {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-run:hover {
+    background-color: #45a049;
+}
+
+.results {
+    margin-top: 30px;
+    background-color: #f0f8ff;
+    border-left: 6px solid #4CAF50;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.scroll-box {
+    max-height: 200px;
+    overflow-y: scroll;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-family: monospace;
+    margin-top: 10px;
+    border-radius: 4px;
+}
