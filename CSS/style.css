@@ -7,14 +7,21 @@ body {
   color: #333;
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
   min-height: 100vh;
-  padding: 30px 15px;
   line-height: 1.5;
 }
 
+/* Contenedor general de la app (formulario + gráfica) */
+.layout {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  padding: 30px 40px;
+  flex-wrap: wrap;
+}
+
+/* Contenedor del formulario */
 .container {
   background: white;
   max-width: 480px;
@@ -22,8 +29,15 @@ body {
   border-radius: 10px;
   padding: 30px 25px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transition: transform 0.5s ease;
 }
 
+/* Al ejecutar: mover a la izquierda */
+.container.shift-left {
+  transform: translateX(-20px);
+}
+
+/* Título */
 h1 {
   margin-bottom: 25px;
   font-weight: 600;
@@ -31,7 +45,7 @@ h1 {
   text-align: center;
 }
 
-/* Grupos de controles (label + input + descripción) */
+/* Grupo de controles */
 .control-group {
   margin-bottom: 25px;
 }
@@ -63,7 +77,6 @@ input[type="number"]:focus {
   outline: none;
 }
 
-/* Descripciones pequeñas */
 small {
   display: block;
   font-size: 0.85rem;
@@ -72,7 +85,7 @@ small {
   line-height: 1.4;
 }
 
-/* Botón principal */
+/* Botón */
 button {
   margin-top: 25px;
   width: 100%;
@@ -134,44 +147,76 @@ button:disabled {
   transition: width 0.2s ease;
 }
 
-/* Estados de la interfaz */
+/* Mensajes */
 .loading {
   color: #2980b9;
   font-weight: 600;
 }
-
 .success {
   color: #27ae60;
   font-weight: 600;
 }
-
 .error {
   color: #c0392b;
   font-weight: 600;
 }
 
-/* Scrollbar personalizado */
+/* Gráfica */
+.chart-box {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  width: 640px;
+  height: fit-content;
+}
+
+/* Scrollbar personalizado para resultados */
 #result::-webkit-scrollbar {
   width: 6px;
 }
-
 #result::-webkit-scrollbar-thumb {
   background-color: #bdc3c7;
   border-radius: 3px;
 }
 
-/* Responsive: ajustes para pantallas pequeñas */
-@media (max-width: 480px) {
-  .container {
-    padding: 20px 15px;
+/* Responsivo */
+@media (max-width: 980px) {
+  .layout {
+    flex-direction: column;
+    align-items: center;
   }
-  
-  h1 {
-    font-size: 1.5rem;
+
+  .container.shift-left {
+    transform: none;
   }
-  
-  button {
-    padding: 10px;
-    font-size: 1rem;
+
+  .chart-box {
+    width: 100%;
+    max-width: 700px;
   }
+}
+
+/* Botón de reset zoom */
+.zoom-reset-btn {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  background: #2980b9;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  z-index: 10;
+  transition: background 0.2s;
+}
+
+.zoom-reset-btn:hover {
+  background: #1c5985;
+}
+
+.chart-box {
+  position: relative; /* Para posicionar el botón correctamente */
 }

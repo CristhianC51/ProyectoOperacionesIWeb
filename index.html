@@ -1,34 +1,57 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Ejecutar Algoritmo Set Cover</title>
-<link rel="stylesheet" href="CSS/style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ejecutar Algoritmo Set Cover</title>
+  <link rel="stylesheet" href="CSS/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1"></script>
 </head>
 <body>
-  <div class="container" role="main" aria-label="Ejecutar Algoritmo Set Cover">
-    <h1>Ejecutar Algoritmo Set Cover</h1>
+  <div id="main-content" class="layout">
+    <!-- Panel izquierdo: formulario -->
+    <div class="container" role="main" aria-label="Ejecutar Algoritmo Set Cover">
+      <h1>Ejecutar Algoritmo Set Cover</h1>
 
-    <div class="control-group">
-      <label for="population">Tamaño de población:</label>
-      <input type="number" id="population" value="100" min="1" max="1000" aria-describedby="population-desc" />
-      <small id="population-desc">Cantidad de soluciones candidatas por generación.</small>
-    </div>
+      <div class="control-group">
+        <label for="population">Tamaño de población:</label>
+        <input type="number" id="population" value="100" min="1" max="1000" aria-describedby="population-desc" />
+        <small id="population-desc">Cantidad de soluciones candidatas por generación.</small>
+      </div>
 
-    <div class="control-group">
-      <label for="generations">Número de iteraciones:</label>
-      <input type="number" id="generations" value="100" min="1" max="5000" aria-describedby="generations-desc" />
-      <small id="generations-desc">Cuántas veces el algoritmo evoluciona la población.</small>
-    </div>
+      <div class="control-group">
+        <label for="generations">Número de iteraciones:</label>
+        <input type="number" id="generations" value="100" min="1" max="5000" aria-describedby="generations-desc" />
+        <small id="generations-desc">Cuántas veces el algoritmo evoluciona la población.</small>
+      </div>
 
-    <button id="runBtn" aria-live="polite" aria-busy="false">Ejecutar</button>
+      <div class="control-group">
+      <label for="seed">Semilla aleatoria:</label>
+      <input 
+        type="number" 
+        id="seed" 
+        value="42" 
+        aria-describedby="seed-desc"
+      />
+      <small id="seed-desc">
+        Usa el mismo valor para obtener resultados reproducibles.
+      </small>
+      </div>
 
-    <div id="progress-container" aria-label="Progreso de ejecución" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <button id="runBtn" aria-live="polite" aria-busy="false">Ejecutar</button>
+
+      <div id="progress-container" aria-label="Progreso de ejecución" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
         <div id="progress-bar"></div>
+      </div>
+
+      <div id="result" aria-live="polite" aria-atomic="true"></div>
     </div>
 
-    <div id="result" aria-live="polite" aria-atomic="true"></div>
+    <!-- Panel derecho: gráfica -->
+    <div id="chart-container" class="chart-box" style="display: none;">
+      <canvas id="costChart" width="600" height="400"></canvas>
+    </div>
   </div>
 
   <script src="JS/script.js"></script>

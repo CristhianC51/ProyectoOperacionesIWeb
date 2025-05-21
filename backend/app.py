@@ -43,9 +43,14 @@ def run_algorithm():
     # Obtener parámetros desde query string
     population_size = int(request.args.get('population', 100))
     generations = int(request.args.get('generations', 100))
+    seed = request.args.get('seed', default=None, type=int)
 
     def generate():
-        random.seed(42)
+        # Inicializar semillas si se proporcionan
+        if seed is not None:
+            random.seed(seed)
+            np.random.seed(seed)
+
         population = toolbox.population(n=population_size)
 
         for gen in range(generations):
@@ -64,7 +69,8 @@ def run_algorithm():
                 'total_iterations': generations,
                 'current_cost': round(best_cost, 2),
                 'clients_covered': clients_covered,
-                'status': 'running'
+                'status': 'running',
+                'current_seed' : seed
             })}\n\n"
 
         # Resultado final
