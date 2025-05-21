@@ -1,59 +1,36 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <title>Ejecutar Algoritmo Set Cover</title>
-    <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 30px auto; }
-        label { display: block; margin-top: 10px; }
-        input, button { padding: 8px; margin-top: 5px; width: 100%; }
-        #result { margin-top: 20px; background: #f0f0f0; padding: 10px; border-radius: 5px; }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ejecutar Algoritmo Set Cover</title>
+<link rel="stylesheet" href="CSS/style.css" />
 </head>
 <body>
+  <div class="container" role="main" aria-label="Ejecutar Algoritmo Set Cover">
     <h1>Ejecutar Algoritmo Set Cover</h1>
-    <label for="population">Tamaño de población:</label>
-    <input type="number" id="population" value="100" min="1" max="1000" />
-    
-    <label for="generations">Número de iteraciones:</label>
-    <input type="number" id="generations" value="100" min="1" max="5000" />
-    
-    <button id="runBtn">Ejecutar</button>
-    
-    <div id="result"></div>
 
-    <script>
-        const runBtn = document.getElementById('runBtn');
-        const resultDiv = document.getElementById('result');
+    <div class="control-group">
+      <label for="population">Tamaño de población:</label>
+      <input type="number" id="population" value="100" min="1" max="1000" aria-describedby="population-desc" />
+      <small id="population-desc">Cantidad de soluciones candidatas por generación.</small>
+    </div>
 
-        runBtn.onclick = () => {
-            const population = document.getElementById('population').value;
-            const generations = document.getElementById('generations').value;
+    <div class="control-group">
+      <label for="generations">Número de iteraciones:</label>
+      <input type="number" id="generations" value="100" min="1" max="5000" aria-describedby="generations-desc" />
+      <small id="generations-desc">Cuántas veces el algoritmo evoluciona la población.</small>
+    </div>
 
-            resultDiv.textContent = "Ejecutando algoritmo, espera...";
+    <button id="runBtn" aria-live="polite" aria-busy="false">Ejecutar</button>
 
-            fetch('https://ethical-hagfish-premium.ngrok-free.app/run', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ population, generations })
-            })
-            .then(res => {
-                if (!res.ok) throw new Error("Error en la petición");
-                return res.json();
-            })
-            .then(data => {
-                resultDiv.innerHTML = `
-                    <strong>Resultados:</strong><br>
-                    Antenas seleccionadas: ${data.antennas_selected}<br>
-                    Costo total: ${data.total_cost.toFixed(2)}<br>
-                    Clientes cubiertos: ${data.clients_covered} de ${data.total_clients}<br>
-                    Índices seleccionados: ${data.selected_indices.join(', ')}
-                `;
-            })
-            .catch(err => {
-                resultDiv.textContent = "Error: " + err.message;
-            });
-        }
-    </script>
+    <div id="progress-container" aria-label="Progreso de ejecución" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div id="progress-bar"></div>
+    </div>
+
+    <div id="result" aria-live="polite" aria-atomic="true"></div>
+  </div>
+
+  <script src="JS/script.js"></script>
 </body>
 </html>
