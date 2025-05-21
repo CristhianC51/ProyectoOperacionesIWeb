@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ejecutar Algoritmo Set Cover</title>
   <link rel="stylesheet" href="CSS/style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
   <div id="main-content" class="layout">
@@ -48,9 +50,16 @@
       <div id="result" aria-live="polite" aria-atomic="true"></div>
     </div>
 
-    <!-- Panel derecho: gráfica -->
-    <div id="chart-container" class="chart-box" style="display: none;">
-      <canvas id="costChart" width="600" height="400"></canvas>
+    <!-- Panel derecho: gráfica y mapa -->
+    <div class="visualization-panel">
+      <div id="chart-container" class="chart-box">
+        <canvas id="costChart" width="600" height="400"></canvas>
+      </div>
+      
+      <div id="map-container" class="chart-box" style="display: none; height: 450px;">
+        <div id="map" style="width: 100%; height: 100%; border-radius: 8px;"></div>
+        <!--<button id="resetMapBtn" class="map-reset-btn">Resetear Mapa</button> -->
+      </div>
     </div>
   </div>
 

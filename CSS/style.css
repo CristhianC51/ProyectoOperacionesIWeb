@@ -220,3 +220,109 @@ button:disabled {
 .chart-box {
   position: relative; /* Para posicionar el botón correctamente */
 }
+
+#map-container {
+  position: relative;
+  margin-top: 20px;
+}
+
+#map {
+  z-index: 1;
+}
+
+.antenna-marker {
+  background-color: #e74c3c;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+
+.client-marker {
+  background-color: #2ecc71;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid white;
+}
+
+.visualization-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 640px;
+}
+
+#map-container {
+  height: 400px;
+  position: relative;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  z-index: 1;
+  margin-bottom: 20px;
+}
+
+.zoom-reset-btn {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background: #2980b9;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  z-index: 10;
+  transition: background 0.2s;
+}
+
+.zoom-reset-btn:hover {
+  background: #1c5985;
+}
+
+/* Ajustes para móviles */
+@media (max-width: 980px) {
+  .visualization-panel {
+    width: 100%;
+  }
+}
+
+.map-reset-btn {
+  position: absolute;
+  top: 420px;
+  bottom: 15px;
+  right: 15px;
+  left: 15px;
+  background: #2980b9;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 1000; /* Para que aparezca sobre el mapa */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.map-reset-btn:hover {
+  background: #1a5276;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Asegúrate que el contenedor del mapa tenga posición relativa */
+#map-container {
+  position: relative;
+  height: 400px;
+  margin-top: 20px;
+  border-radius: 8px;
+  overflow: hidden; /* Para que el botón no se salga */
+}

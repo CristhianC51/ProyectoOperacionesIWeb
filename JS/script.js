@@ -10,6 +10,29 @@ const containerDiv = document.querySelector('.container');
 let costChart = null;
 let costHistory = [];
 
+let map = null;
+let antennaMarkers = [];
+let clientMarkers = [];
+
+function initMap() {
+  // Destruye el mapa existente si hay uno
+  if (map) {
+    map.remove();
+  }
+  
+  // Crea un nuevo mapa centrado en una ubicación por defecto (ej: CDMX)
+  map = L.map('map').setView([7.12539, -73.1198], 12);
+  
+  // Añade capa de tiles de OpenStreetMap
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+  
+  // Limpia marcadores anteriores
+  antennaMarkers = [];
+  clientMarkers = [];
+}
+
 function setLoading(loading = true) {
   runBtn.disabled = loading;
   runBtn.setAttribute('aria-busy', loading ? 'true' : 'false');
@@ -29,6 +52,49 @@ function setLoading(loading = true) {
   }
 }
 
+function plotAntennas(selectedIndices) {
+  if (!map) return;
+  
+  // Limpiar marcadores anteriores
+  antennaMarkers.forEach(marker => map.removeLayer(marker));
+  antennaMarkers = [];
+  
+  // Simulación de coordenadas - ¡REEMPLAZA CON TUS DATOS REALES!
+  // En un caso real, deberías tener un archivo con las coordenadas de cada antena
+  selectedIndices.forEach(index => {
+    // Genera coordenadas aleatorias alrededor del centro del mapa
+    const lat = 7.12539 + (Math.random() * 0.1 - 0.05);
+    const lng = -73.1198 + (Math.random() * 0.1 - 0.05);
+    
+    const marker = L.circleMarker([lat, lng], {
+      radius: 8,
+      fillColor: "#e74c3c",
+      color: "#fff",
+      weight: 2,
+      opacity: 1,
+      fillOpacity: 0.8
+    }).addTo(map);
+
+    const COVERAGE_RADIUS_KM = 0.5;
+    
+    L.circle([lat, lng], {
+        radius: COVERAGE_RADIUS_KM * 1000,
+        color: '#3498db',
+        fillColor: '#3498db',
+        fillOpacity: 0.2
+      }).addTo(map);
+    
+    marker.bindPopup(`Antena #${index}`);
+    antennaMarkers.push(marker);
+  });
+  
+  // Ajusta el zoom para mostrar todas las antenas
+  if (antennaMarkers.length > 0) {
+    const group = new L.featureGroup(antennaMarkers);
+    map.fitBounds(group.getBounds().pad(0.2));
+  }
+}
+
 function showError(message) {
   resultDiv.className = 'error';
   resultDiv.textContent = "Error: " + message;
@@ -44,6 +110,13 @@ function showFinalResult(data) {
     <strong>Índices seleccionados:</strong><br>
     <small style="color:#555; font-family: monospace; max-height: 90px; overflow-y: auto; display: block; background: #fff; border-radius: 5px; padding: 8px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);">${data.selected_indices.join(', ')}</small>
   `;
+
+  // Mostrar el contenedor del mapa
+  document.getElementById('map-container').style.display = 'block';
+  
+  // Inicializar y mostrar el mapa con las antenas seleccionadas
+  initMap();
+  plotAntennas(data.selected_indices);
 }
 
 runBtn.onclick = () => {
@@ -232,5 +305,10 @@ document.addEventListener('DOMContentLoaded', () => {
         costChart.update();
       }
     };
+  }
+
+  if (map && antennaMarkers.length > 0) {
+    const group = new L.featureGroup(antennaMarkers);
+    map.fitBounds(group.getBounds().pad(0.2));
   }
 });
