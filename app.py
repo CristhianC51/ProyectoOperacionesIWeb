@@ -1,25 +1,21 @@
-from flask import Flask, render_template, request
-import pandas as pd
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import random
 import numpy as np
 from deap import base, creator, tools, algorithms
-import random
-import time
+import pandas as pd
 
 app = Flask(__name__)
+CORS(app)  # Permite CORS
 
-# --- Cargar datos solo una vez ---
-# Cargar matriz de cobertura
+# Carga datos una vez
 flat_data = pd.read_csv('CSV/set_cover_500x500.csv', header=None).squeeze()
-flat_data = flat_data.iloc[1:]  # eliminar encabezado
+flat_data = flat_data.iloc[1:]
 coverage = flat_data.to_numpy().reshape((500, 500))
-
-# Cargar vector de costos
 df_cost = pd.read_excel('CSV/Costo_S.xlsx', header=None)
 cost = df_cost.iloc[1, 1:501].to_numpy()
-
 n_clients, n_antennas = coverage.shape
 
-# --- Configuración de DEAP ---
 creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
 creator.create("Individual", list, fitness=creator.FitnessMin)
 
@@ -31,11 +27,9 @@ toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 def eval_set_cover(individual):
     selected = np.array(individual)
     total_cost = np.sum(cost * selected)
-
     coverage_matrix = coverage[:, selected == 1]
     clients_covered = np.sum(np.any(coverage_matrix, axis=1))
     uncovered = n_clients - clients_covered
-
     penalty = uncovered * 1e6
     return (total_cost + penalty,)
 
@@ -44,26 +38,16 @@ toolbox.register("mate", tools.cxTwoPoint)
 toolbox.register("mutate", tools.mutFlipBit, indpb=0.01)
 toolbox.register("select", tools.selTournament, tournsize=3)
 
-# --- Rutas de la app ---
-@app.route("/", methods=["GET"])
-def index():
-    return render_template("index.html", show_results=False)
-
-@app.route("/run", methods=["POST"])
+@app.route('/run', methods=['POST'])
 def run_algorithm():
-    try:
-        ngen = int(request.form.get("ngen", 2000))
-        pop_size = int(request.form.get("popsize", 1000))
-    except ValueError:
-        ngen = 2000
-        pop_size = 1000
+    data = request.json
+    population_size = int(data.get('population', 100))
+    generations = int(data.get('generations', 100))
 
     random.seed(42)
-    population = toolbox.population(n=pop_size)
+    population = toolbox.population(n=population_size)
 
-    start_time = time.time()
-
-    for gen in range(ngen):
+    for gen in range(generations):
         offspring = algorithms.varAnd(population, toolbox, cxpb=0.5, mutpb=0.2)
         fits = list(map(toolbox.evaluate, offspring))
         for ind, fit in zip(offspring, fits):
@@ -75,18 +59,15 @@ def run_algorithm():
     selected_indices = [i for i, x in enumerate(best) if x == 1]
     coverage_matrix = coverage[:, np.array(best) == 1]
     clients_covered = np.sum(np.any(coverage_matrix, axis=1))
-    total_time = round(time.time() - start_time, 2)
 
-    return render_template("index.html",
-                           show_results=True,
-                           selected=selected_indices,
-                           cost=round(best_cost, 2),
-                           covered=clients_covered,
-                           total=n_clients,
-                           ngen=ngen,
-                           pop_size=pop_size,
-                           time=total_time)
+    result = {
+        "antennas_selected": len(selected_indices),
+        "total_cost": best_cost,
+        "clients_covered": int(clients_covered),
+        "total_clients": int(n_clients),
+        "selected_indices": selected_indices
+    }
+    return jsonify(result)
 
-# --- Ejecutar en local ---
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)

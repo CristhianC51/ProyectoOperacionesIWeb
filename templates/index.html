@@ -1,38 +1,59 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>🛰️ Optimizador de Antenas</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <title>Ejecutar Algoritmo Set Cover</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 30px auto; }
+        label { display: block; margin-top: 10px; }
+        input, button { padding: 8px; margin-top: 5px; width: 100%; }
+        #result { margin-top: 20px; background: #f0f0f0; padding: 10px; border-radius: 5px; }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🛰️ Optimización de Cobertura</h1>
-        <p>Haz clic para ejecutar el algoritmo genético que selecciona las mejores antenas para cubrir a todos los clientes con el menor costo.</p>
+    <h1>Ejecutar Algoritmo Set Cover</h1>
+    <label for="population">Tamaño de población:</label>
+    <input type="number" id="population" value="100" min="1" max="1000" />
+    
+    <label for="generations">Número de iteraciones:</label>
+    <input type="number" id="generations" value="100" min="1" max="5000" />
+    
+    <button id="runBtn">Ejecutar</button>
+    
+    <div id="result"></div>
 
-        <form method="post" action="/run">
-            <div class="form-group">
-                <label for="ngen">Número de generaciones:</label>
-                <input type="number" id="ngen" name="ngen" value="2000" min="1" required>
-            </div>
-            <div class="form-group">
-                <label for="popsize">Tamaño de la población:</label>
-                <input type="number" id="popsize" name="popsize" value="1000" min="2" required>
-            </div>
-            <button type="submit" class="btn-run">🚀 Ejecutar Algoritmo</button>
-        </form>
+    <script>
+        const runBtn = document.getElementById('runBtn');
+        const resultDiv = document.getElementById('result');
 
-        {% if show_results %}
-        <div class="results">
-            <h2>📊 Resultados</h2>
-            <p><strong>✅ Antenas seleccionadas:</strong> {{ selected|length }}</p>
-            <p><strong>💰 Costo total:</strong> ${{ cost }}</p>
-            <p><strong>👥 Clientes cubiertos:</strong> {{ covered }} de {{ total }}</p>
-            <p><strong>📍 Índices seleccionados:</strong></p>
-            <div class="scroll-box">{{ selected }}</div>
-        </div>
-        {% endif %}
-    </div>
+        runBtn.onclick = () => {
+            const population = document.getElementById('population').value;
+            const generations = document.getElementById('generations').value;
+
+            resultDiv.textContent = "Ejecutando algoritmo, espera...";
+
+            fetch('http://TU_IP_LOCAL:5000/run', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ population, generations })
+            })
+            .then(res => {
+                if (!res.ok) throw new Error("Error en la petición");
+                return res.json();
+            })
+            .then(data => {
+                resultDiv.innerHTML = `
+                    <strong>Resultados:</strong><br>
+                    Antenas seleccionadas: ${data.antennas_selected}<br>
+                    Costo total: ${data.total_cost.toFixed(2)}<br>
+                    Clientes cubiertos: ${data.clients_covered} de ${data.total_clients}<br>
+                    Índices seleccionados: ${data.selected_indices.join(', ')}
+                `;
+            })
+            .catch(err => {
+                resultDiv.textContent = "Error: " + err.message;
+            });
+        }
+    </script>
 </body>
 </html>
