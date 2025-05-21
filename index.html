@@ -32,7 +32,7 @@
 
             resultDiv.textContent = "Ejecutando algoritmo, espera...";
 
-            fetch('http://127.0.0.1:5000/run', {
+            fetch('https://b3d8-2800-e2-2f7f-f945-2cc9-2f9f-6a35-de18.ngrok-free.app/run', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ population, generations })
