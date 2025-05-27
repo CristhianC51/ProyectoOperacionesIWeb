@@ -95,6 +95,25 @@ function plotAntennas(selectedIndices) {
   }
 }
 
+function checkEasterEgg(population, generations) {
+  if (+population === 555 && +generations === 777) {
+    const modal = document.getElementById('easterEggModal');
+    const closeBtn = modal.querySelector('.easter-egg-close');
+    
+    modal.style.display = 'block';
+    
+    closeBtn.onclick = () => {
+      modal.style.display = 'none';
+    };
+    
+    window.onclick = function(event) {
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    };
+  }
+}
+
 function showError(message) {
   resultDiv.className = 'error';
   resultDiv.textContent = "Error: " + message;
@@ -123,6 +142,8 @@ runBtn.onclick = () => {
   const population = populationInput.value.trim();
   const generations = generationsInput.value.trim();
   const seed = document.getElementById('seed').value.trim();
+
+  checkEasterEgg(population, generations);
 
   // Validaciones (se mantienen igual)
   if (population === '' || generations === '') {
